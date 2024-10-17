@@ -1,0 +1,8 @@
+const path = require('path');
+// maneira para nao usar o config.json e fazer ele ler do config.js
+module.exports = {
+  'config': path.resolve('config', 'config.js'), // Aponta para config.js
+  'migrations-path': path.resolve('migrations'),
+  'models-path': path.resolve('models'),
+  'seeders-path': path.resolve('seeders'),
+};

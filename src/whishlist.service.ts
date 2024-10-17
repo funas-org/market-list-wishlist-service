@@ -1,62 +1,41 @@
 import { Injectable } from '@nestjs/common';
-import { WishlistDTO } from './dtos/whishlist.dto';
-
-const mockWhishlist: WishlistDTO = {
-  name: 'Semanal',
-  items: [
-    {
-      name: 'item 1',
-      price: 10,
-      category: 'category 1',
-      maxPrice: 20,
-      minPrice: 10,
-    },
-    {
-      name: 'item 2',
-      price: 20,
-      category: 'category 2',
-      maxPrice: 30,
-      minPrice: 15,
-    },
-  ],
-};
+import { Wishlist } from 'models/wishlist.model';
+import { InjectModel } from '@nestjs/sequelize';
+import { Sequelize } from 'sequelize-typescript';
 
 @Injectable()
-export class AppService {
+export class WishlistService {
+  constructor(
+    @InjectModel(Wishlist)
+    private wishlistModel: typeof Wishlist,
+    private sequelize: Sequelize,
+  ) {}
+
   async getWishlist({ id }: { id: string }) {
-    console.log('id', id);
-    // Vai bater no banco e pegar os dados da whishlist
-    const resp = new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(mockWhishlist);
-      }, 2000);
-    });
-    return resp;
+    const wishlist = this.wishlistModel.findByPk(id);
+    // Aqui nos temos que pegar todos os produtos da wishlist tb
+    if (!wishlist) {
+      throw new Error('Wishlist not found');
+    }
+    return wishlist;
   }
 
-  async updateWishlist({
-    id,
-    whishlist,
-  }: {
-    id: string;
-    whishlist: WishlistDTO;
-  }) {
-    // Vai bater no banco e atualizar a whishlist
-    const resp = new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ id, whishlist });
-      }, 2000);
-    });
-    return resp;
+  async updateWishlist({ id, wishlist }: { id: string; wishlist: Wishlist }) {
+    try {
+      await this.sequelize.transaction(async (t) => {
+        await this.wishlistModel.update(wishlist, {
+          where: { id },
+          transaction: t,
+        });
+      });
+      return { id, ...wishlist };
+    } catch (error: any) {
+      console.error('Error updating wishlist', error);
+    }
   }
 
-  async createWishlist({ whishlist }: { whishlist: WishlistDTO }) {
-    // Vai bater no banco e criar a whishlist
-    const resp = new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(whishlist);
-      }, 2000);
-    });
-    return resp;
+  async createWishlist({ whishlist }: { whishlist: Wishlist }) {
+    const wishlistCreated = this.wishlistModel.create(whishlist);
+    return wishlistCreated;
   }
 }

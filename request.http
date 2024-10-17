@@ -1,20 +1,22 @@
 ### GET Wishlist
-GET http://localhost:3000/1
+GET http://localhost:3000/2
 
 ### Atualiza uma wishlist
 PUT http://localhost:3000/1
 Content-Type: application/json
 
 {
-  "name": "Nova wishlist",
+  "name": "Sempre Tem",
   "items": [
     {
-      "name": "Item 1",
-      "price": 10.0
+      "name": "Batata Inglesa",
+      "priceInCents": 1000,
+      "category": "Feira"
     },
     {
-      "name": "Item 2",
-      "price": 20.0
+      "name": "Carne Moída",
+      "priceInCents": 2000,
+      "category": "Carnes"
     }
   ]
 }
@@ -24,15 +26,8 @@ POST http://localhost:3000
 Content-Type: application/json
 
 {
-  "name": "Nova wishlist",
-  "items": [
-    {
-      "name": "Item 1",
-      "price": 10.0
-    },
-    {
-      "name": "Item 2",
-      "price": 20.0
-    }
-  ]
+  "name": "Nova wishlist em PROD",
+  "items": []
 }
+
+
