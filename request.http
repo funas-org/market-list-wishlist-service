@@ -1,6 +1,9 @@
 ### GET Wishlist
 GET http://localhost:3000/2
 
+### Checka se uma wishlist existe
+GET http://localhost:3000/1/check-exists
+
 ### Atualiza uma wishlist
 PUT http://localhost:3000/1
 Content-Type: application/json
@@ -26,8 +29,7 @@ POST http://localhost:3000
 Content-Type: application/json
 
 {
-  "name": "Nova wishlist em PROD",
-  "items": []
+  "name": "Wishlist 2"
 }
 
 
