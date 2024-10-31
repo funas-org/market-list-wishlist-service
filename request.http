@@ -1,5 +1,6 @@
 ### GET Wishlist
 GET http://localhost:3000/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imxlby5mdW5hQGdtYWlsLmNvbSIsImlhdCI6MTczMDQwMjY3NywiZXhwIjoxNzMwNDg5MDc3fQ.3ewhmcMDm3bkQyle-Z04MTVW2Q9KZAWSWNjs9pzpfF0
 
 ### Checka se uma wishlist existe
 GET http://localhost:3000/1/check-exists

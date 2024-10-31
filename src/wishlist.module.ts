@@ -5,7 +5,11 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Wishlist } from 'models/wishlist.model';
 import { ConfigModule } from '@nestjs/config';
 import * as path from 'path';
-import { Dialect } from 'sequelize';
+import dbConfig from './config/db.config';
+import dbConfigProduction from './config/db.config.production';
+import { JwtGuard } from './guards/jwt-auth.guard';
+import jwtConfig from './config/jwt.config';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 const envFile =
   process.env.NODE_ENV === 'production'
@@ -17,21 +21,23 @@ const envFile =
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: path.resolve(process.cwd(), envFile),
+      load: [dbConfig, dbConfigProduction],
     }),
-    SequelizeModule.forRoot({
-      dialect: process.env.DB_DIALECT as Dialect,
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      username: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      synchronize: process.env.NODE_ENV !== 'production',
-      models: [Wishlist],
-      autoLoadModels: true,
+    ConfigModule.forFeature(jwtConfig),
+    SequelizeModule.forRootAsync({
+      useFactory:
+        process.env.NODE_ENV === 'production' ? dbConfigProduction : dbConfig,
     }),
     SequelizeModule.forFeature([Wishlist]),
   ],
   controllers: [WishlistController],
-  providers: [WishlistService],
+  providers: [
+    WishlistService,
+    JwtStrategy,
+    {
+      provide: 'APP_GUARD',
+      useClass: JwtGuard,
+    },
+  ],
 })
 export class AppModule {}

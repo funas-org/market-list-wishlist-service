@@ -15,11 +15,11 @@ import { WishlistDTO } from './dtos/whishlist.dto';
 
 @Controller()
 export class WishlistController {
-  constructor(private readonly appService: WishlistService) {}
+  constructor(private readonly wishlistService: WishlistService) {}
 
   @Get(':id')
   async getWishlist(@Param('id') id: string, @Res() res: Response) {
-    const wishlist = await this.appService.getWishlist({ id: Number(id) });
+    const wishlist = await this.wishlistService.getWishlist({ id: Number(id) });
     if ('error' in wishlist) {
       return res.status(HttpStatus.NOT_FOUND).json(wishlist);
     }
@@ -32,7 +32,7 @@ export class WishlistController {
     @Param('id') id: string,
     @Res() res: Response,
   ) {
-    const updatedWishList = await this.appService.updateWishlist({
+    const updatedWishList = await this.wishlistService.updateWishlist({
       id,
       wishlist: newWishlist,
     });
@@ -46,7 +46,7 @@ export class WishlistController {
 
   @Post()
   async createWishlist(@Body() newWishlist: WishlistDTO, @Res() res: Response) {
-    const response = await this.appService.createWishlist({
+    const response = await this.wishlistService.createWishlist({
       whishlist: newWishlist,
     });
     return res.status(HttpStatus.CREATED).json(response);
@@ -54,7 +54,7 @@ export class WishlistController {
 
   @Get(':id/check-exists')
   async checkIfWishlistExists(@Param('id') id: string, @Res() res: Response) {
-    const wishlist = await this.appService.getWishlist({ id: Number(id) });
+    const wishlist = await this.wishlistService.getWishlist({ id: Number(id) });
     return res.status(HttpStatus.OK).json(!!wishlist);
   }
 }
