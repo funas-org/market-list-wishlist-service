@@ -1,9 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 require('dotenv').config({
-  path:
-    process.env.NODE_ENV === 'production'
-      ? '.env.production'
-      : '.env.development',
+  path: '.env',
 }); // Carrega as variáveis de ambiente do .env
 
 module.exports = {
