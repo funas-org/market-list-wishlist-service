@@ -9,6 +9,8 @@ import dbConfigProduction from './config/db.config.production';
 import { JwtGuard } from './guards/jwt-auth.guard';
 import jwtConfig from './config/jwt.config';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { AuthTokenInterceptor } from './interceptors/auth-token.interceptor';
 
 @Module({
   imports: [
@@ -30,6 +32,10 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     {
       provide: 'APP_GUARD',
       useClass: JwtGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: AuthTokenInterceptor,
     },
   ],
 })
