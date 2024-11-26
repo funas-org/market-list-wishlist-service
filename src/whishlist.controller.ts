@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Req,
   Res,
 } from '@nestjs/common';
 import { WishlistService } from './whishlist.service';
@@ -20,6 +21,20 @@ export class WishlistController {
   @Get(':id')
   async getWishlist(@Param('id') id: string, @Res() res: Response) {
     const wishlist = await this.wishlistService.getWishlist({ id: Number(id) });
+    if ('error' in wishlist) {
+      return res.status(HttpStatus.NOT_FOUND).json(wishlist);
+    }
+    return res.status(HttpStatus.OK).json(wishlist);
+  }
+
+  @Get()
+  async getWishlistByOwnerEmail(
+    @Req() req: Request & { user: { email: string } },
+    @Res() res: Response,
+  ) {
+    const wishlist = await this.wishlistService.getWishlistByOwnerEmail({
+      ownerEmail: req.user.email,
+    });
     if ('error' in wishlist) {
       return res.status(HttpStatus.NOT_FOUND).json(wishlist);
     }
@@ -45,9 +60,14 @@ export class WishlistController {
   }
 
   @Post()
-  async createWishlist(@Body() newWishlist: WishlistDTO, @Res() res: Response) {
+  async createWishlist(
+    @Body() newWishlist: WishlistDTO,
+    @Req() req: Request & { user: { email: string } },
+    @Res() res: Response,
+  ) {
     const response = await this.wishlistService.createWishlist({
       whishlist: newWishlist,
+      userEmail: req.user.email,
     });
     return res.status(HttpStatus.CREATED).json(response);
   }

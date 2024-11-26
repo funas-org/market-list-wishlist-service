@@ -15,4 +15,7 @@ export class Wishlist extends Model<Wishlist> {
 
   @Column({ allowNull: false })
   name: string;
+
+  @Column({ allowNull: false })
+  ownerEmail: string;
 }

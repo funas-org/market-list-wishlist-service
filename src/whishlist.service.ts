@@ -34,6 +34,23 @@ export class WishlistService {
     };
   }
 
+  async getWishlistByOwnerEmail({ ownerEmail }: { ownerEmail: string }) {
+    const wishlists = await this.wishlistModel.findAll({
+      where: { ownerEmail },
+    });
+    if (!wishlists?.length) {
+      return { error: 'Wishlist not found' };
+    }
+    const productsFromWishlist: any[] = await fetchProduct(
+      `/wishlist-products/${wishlists[0].id}`,
+    );
+    const basicWishlist = wishlists[0].get({ plain: true });
+    return {
+      ...basicWishlist,
+      products: productsFromWishlist,
+    };
+  }
+
   async updateWishlist({ id, wishlist }: { id: string; wishlist: Wishlist }) {
     try {
       await this.sequelize.transaction(async (t) => {
@@ -48,8 +65,17 @@ export class WishlistService {
     }
   }
 
-  async createWishlist({ whishlist }: { whishlist: WishlistDTO }) {
-    const wishlistCreated = await this.wishlistModel.create(whishlist);
+  async createWishlist({
+    whishlist,
+    userEmail,
+  }: {
+    whishlist: WishlistDTO;
+    userEmail: string;
+  }) {
+    const wishlistCreated = await this.wishlistModel.create({
+      ...whishlist,
+      ownerEmail: userEmail,
+    });
 
     return wishlistCreated.get({ plain: true });
   }
