@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { WishlistService } from './whishlist.service';
 import { Response } from 'express';
-import { Wishlist } from 'models/wishlist.model';
 import { WishlistDTO } from './dtos/whishlist.dto';
 
 @Controller()
@@ -43,7 +42,7 @@ export class WishlistController {
 
   @Put(':id')
   async updateWishlist(
-    @Body() newWishlist: Wishlist,
+    @Body() newWishlist: WishlistDTO,
     @Param('id') id: string,
     @Res() res: Response,
   ) {
@@ -69,6 +68,9 @@ export class WishlistController {
       whishlist: newWishlist,
       userEmail: req.user.email,
     });
+    if ('error' in response) {
+      return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json(response);
+    }
     return res.status(HttpStatus.CREATED).json(response);
   }
 

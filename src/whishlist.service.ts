@@ -44,14 +44,35 @@ export class WishlistService {
     const productsFromWishlist: any[] = await fetchProduct(
       `/wishlist-products/${wishlists[0].id}`,
     );
+
+    const productCategories: string[] = await fetchProduct('/categories');
+
+    const productsToCategorize = [...productsFromWishlist];
+    const productsByCategory = productCategories.map((category) => {
+      const productsInThisCategory = [];
+      productsToCategorize.forEach((product) => {
+        if (product.category === category) {
+          productsInThisCategory.push(product);
+          productsToCategorize.splice(productsToCategorize.indexOf(product), 1);
+        }
+      });
+      return { category, products: productsInThisCategory };
+    });
+
     const basicWishlist = wishlists[0].get({ plain: true });
     return {
       ...basicWishlist,
-      products: productsFromWishlist,
+      products: productsByCategory,
     };
   }
 
-  async updateWishlist({ id, wishlist }: { id: string; wishlist: Wishlist }) {
+  async updateWishlist({
+    id,
+    wishlist,
+  }: {
+    id: string;
+    wishlist: WishlistDTO;
+  }) {
     try {
       await this.sequelize.transaction(async (t) => {
         await this.wishlistModel.update(wishlist, {
@@ -72,6 +93,13 @@ export class WishlistService {
     whishlist: WishlistDTO;
     userEmail: string;
   }) {
+    const wishlistFound = await this.getWishlistByOwnerEmail({
+      ownerEmail: userEmail,
+    });
+    const HAS_ERROR = 'error' in wishlistFound;
+    if (!HAS_ERROR) {
+      return { error: 'Wishlist already exists' };
+    }
     const wishlistCreated = await this.wishlistModel.create({
       ...whishlist,
       ownerEmail: userEmail,
