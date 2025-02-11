@@ -1,6 +1,10 @@
 ### GET Wishlist
-GET http://localhost:3000/2
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imxlby5mdW5hQGdtYWlsLmNvbSIsImlhdCI6MTczMDQwMjY3NywiZXhwIjoxNzMwNDg5MDc3fQ.3ewhmcMDm3bkQyle-Z04MTVW2Q9KZAWSWNjs9pzpfF0
+GET http://localhost:8000/wishlist/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imxlby5mdW5hQGdtYWlsLmNvbSIsImlhdCI6MTczMjgwMDk1NiwiZXhwIjoxNzMyODg3MzU2fQ.VUA1J45RCus6UbGmg7DoO9Q0TBQavNlxMYZlSiWHwe0
+
+### GET Wishlist by Owner
+GET http://localhost:3000/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imxlby5mdW5hQGdtYWlsLmNvbSIsImlhdCI6MTczMjYyNjE2MCwiZXhwIjoxNzMyNzEyNTYwfQ.QgYSURwDVfjiU0IhhWVqsMIJkbtu4Xccmq1sWhw-r8M
 
 ### Checka se uma wishlist existe
 GET http://localhost:3000/1/check-exists
@@ -28,9 +32,26 @@ Content-Type: application/json
 ### Cria uma wishlist
 POST http://localhost:3000
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imxlby5mdW5hQGdtYWlsLmNvbSIsImlhdCI6MTczMjYyNjE2MCwiZXhwIjoxNzMyNzEyNTYwfQ.QgYSURwDVfjiU0IhhWVqsMIJkbtu4Xccmq1sWhw-r8M
 
 {
-  "name": "Wishlist 2"
+  "name": "Wishlist 3"
 }
 
+# PRODUCTION --------------------------------------------
+### GET Wishlist by id
+GET https://market-list-wishlist-service-768138256475.us-central1.run.app/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imxlby5mdW5hQGdtYWlsLmNvbSIsImlhdCI6MTczMjYyNjE2MCwiZXhwIjoxNzMyNzEyNTYwfQ.QgYSURwDVfjiU0IhhWVqsMIJkbtu4Xccmq1sWhw-r8M
 
+### GET Wishlist by Owner Email
+GET https://market-list-wishlist-service-768138256475.us-central1.run.app/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imxlby5mdW5hQGdtYWlsLmNvbSIsImlhdCI6MTczMjYyNjE2MCwiZXhwIjoxNzMyNzEyNTYwfQ.QgYSURwDVfjiU0IhhWVqsMIJkbtu4Xccmq1sWhw-r8M
+
+### Cria uma wishlist
+POST https://market-list-wishlist-service-768138256475.us-central1.run.app/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imxlby5mdW5hQGdtYWlsLmNvbSIsImlhdCI6MTczMjYyNjE2MCwiZXhwIjoxNzMyNzEyNTYwfQ.QgYSURwDVfjiU0IhhWVqsMIJkbtu4Xccmq1sWhw-r8M
+
+{
+  "name": "Wishlist 1"
+}
